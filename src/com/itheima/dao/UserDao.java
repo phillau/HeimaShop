@@ -21,4 +21,14 @@ public class UserDao {
 		}
 		return update;
 	}
+
+	public void active(String activeCode) {
+		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+		String sql = "update user set state=? where code=?";
+		try {
+			runner.update(sql,1,activeCode);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

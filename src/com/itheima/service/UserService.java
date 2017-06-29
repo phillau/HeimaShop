@@ -9,4 +9,9 @@ public class UserService {
 		int row = dao.regist(user);
 		return row>0?true:false;
 	}
+
+	public void active(String activeCode) {
+		UserDao dao = new UserDao();
+		dao.active(activeCode);
+	}
 }

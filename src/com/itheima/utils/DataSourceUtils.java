@@ -15,12 +15,12 @@ public class DataSourceUtils {
 
 	private static ThreadLocal<Connection> tl = new ThreadLocal<Connection>();
 
-	// 鐩存帴鍙互鑾峰彇涓�涓繛鎺ユ睜
+	// 直接可以获取一个连接池
 	public static DataSource getDataSource() {
 		return dataSource;
 	}
 
-	// 鑾峰彇杩炴帴瀵硅薄
+	// 获取连接对象
 	public static Connection getConnection() throws SQLException {
 
 		Connection con = tl.get();
@@ -31,7 +31,7 @@ public class DataSourceUtils {
 		return con;
 	}
 
-	// 寮�鍚簨鍔�
+	// 开启事务
 	public static void startTransaction() throws SQLException {
 		Connection con = getConnection();
 		if (con != null) {
@@ -39,7 +39,7 @@ public class DataSourceUtils {
 		}
 	}
 
-	// 浜嬪姟鍥炴粴
+	// 事务回滚
 	public static void rollback() throws SQLException {
 		Connection con = getConnection();
 		if (con != null) {
@@ -47,17 +47,17 @@ public class DataSourceUtils {
 		}
 	}
 
-	// 鎻愪氦骞朵笖 鍏抽棴璧勬簮鍙婁粠ThreadLocall涓噴鏀�
+	// 提交并且 关闭资源及从ThreadLocall中释放
 	public static void commitAndRelease() throws SQLException {
 		Connection con = getConnection();
 		if (con != null) {
-			con.commit(); // 浜嬪姟鎻愪氦
-			con.close();// 鍏抽棴璧勬簮
-			tl.remove();// 浠庣嚎绋嬬粦瀹氫腑绉婚櫎
+			con.commit(); // 事务提交
+			con.close();// 关闭资源
+			tl.remove();// 从线程绑定中移除
 		}
 	}
 
-	// 鍏抽棴璧勬簮鏂规硶
+	// 关闭资源方法
 	public static void closeConnection() throws SQLException {
 		Connection con = getConnection();
 		if (con != null) {
