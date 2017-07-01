@@ -3,6 +3,7 @@ package com.itheima.dao;
 import java.sql.SQLException;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.itheima.domain.User;
 import com.itheima.utils.DataSourceUtils;
@@ -30,5 +31,17 @@ public class UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Long checkUsername(String username) {
+		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+		String sql = "select count(*) from user where username=?";
+		Long query = null;
+		try {
+			query = (Long) runner.query(sql, new ScalarHandler(),username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return query;
 	}
 }

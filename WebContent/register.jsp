@@ -36,11 +36,32 @@ font {
 }
 </style>
 <script type="text/javascript">
+
+//自定义校验规则
+	$.validator.addMethod(
+		"checkUsername",
+		function(value,element,params){
+			var flag = false;
+			$.ajax({
+				"async":false,
+				"url":"${pageContext.request.contextPath}/checkUsername",
+				"data":{"username":value},
+				"type":"POST",
+				"dataType":"json",
+				"success":function(data){
+					flag = data.isExist;
+				}	
+			});
+			return !flag;
+		}
+	);
+
 	$(function(){
 		$("#myform").validate({
 			rules:{
 				"username":{
-					"required":true
+					"required":true,
+					"checkUsername": "xxx"
 				},
 				"password":{
 					"required":true,
@@ -61,7 +82,8 @@ font {
 			},
 			messages:{
 				"username":{
-					"required":"用户名不能为空"
+					"required":"用户名不能为空",
+					"checkUsername": "用户名已存在"
 				},
 				"password":{
 					"required":"密码不能为空", 

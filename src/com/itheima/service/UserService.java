@@ -14,4 +14,10 @@ public class UserService {
 		UserDao dao = new UserDao();
 		dao.active(activeCode);
 	}
+
+	public boolean checkUsername(String username) {
+		UserDao dao = new UserDao();
+		Long isExist = dao.checkUsername(username);
+		return isExist>0?true:false;
+	}
 }
