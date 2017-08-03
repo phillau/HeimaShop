@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.itheima.domain.Category;
+import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
 import com.itheima.utils.DataSourceUtils;
 
@@ -45,4 +47,14 @@ public class ProductDao {
 		}
 	}
 
+	public int getCount() {
+		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+		String sql = "SELECT COUNT(*) FROM product";
+		try {
+			return (Integer) runner.query(sql, new ScalarHandler());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 }

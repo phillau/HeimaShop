@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.itheima.domain.Category;
 import com.itheima.service.ProductService;
+import com.itheima.utils.JedisPoolUtils;
+
+import redis.clients.jedis.Jedis;
 
 @WebServlet("/categoryList")
 public class CategoryListServlet extends HttpServlet {
@@ -23,11 +26,18 @@ public class CategoryListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ProductService service = new ProductService();
-		List<Category> categoryList = service.findCategoryProductList();
+		Jedis jedis = JedisPoolUtils.getJedis();
+		String categoryListJson = jedis.get("categoryListJson");
+		if(categoryListJson==null){
+			System.out.println("缓存没有数据 查询数据库");
+			List<Category> categoryList = service.findCategoryProductList();
+			Gson gson = new Gson();
+			categoryListJson = gson.toJson(categoryList);
+			jedis.set("categoryListJson", categoryListJson);
+			System.out.println("categoryListJson="+categoryListJson);
+		}
 		response.setContentType("text/html;charset=UTF-8");
-		Gson gson = new Gson();
-		String json = gson.toJson(categoryList);
-		response.getWriter().write(json);
+		response.getWriter().write(categoryListJson);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

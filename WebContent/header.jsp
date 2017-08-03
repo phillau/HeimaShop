@@ -54,11 +54,12 @@
 			$(function(){
 				var content = "";
 				$.post(
-					"${pageContext.request.contextPath}/CategoryList",
+					"${pageContext.request.contextPath}/categoryList",
 					function(data){
 						for(var i=0;i<data.length;i++){
 							//<li><a href="#">${category.cname}</a></li>
-							content+="<li><a href="#">"+data[i].cname+"</a></li>"
+							/* content+="<li><a href='#'>"+data[i].cname+"</a></li>"; */
+							 content+="<li><a href='${pageContext.request.contextPath}/productListByCid?cid="+data[i].cid+"'>"+data[i].cname+"</a></li>";  
 						}
 						//将拼接好的li放置到ul中
 						$("#categoryUL").html(content);
@@ -67,6 +68,5 @@
 				);
 			});
 		</script>
-		
 	</nav>
 </div>

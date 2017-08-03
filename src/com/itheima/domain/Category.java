@@ -1,7 +1,7 @@
 package com.itheima.domain;
 
 public class Category {
-	public static String cid;
+	public String cid;
 	public String cname;
 	public String getCid() {
 		return cid;
