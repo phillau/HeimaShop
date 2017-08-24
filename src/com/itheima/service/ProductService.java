@@ -25,16 +25,25 @@ public class ProductService {
 		return categoryList;
 	}
 
-	public void findCountPage() {
-		PageBean pageBean = new PageBean();
-		int currentPage = 1;
-		int currentCount = 12;
-		int totalCount = dao.getCount();
-		int totalPage = (int) Math.ceil(totalCount/currentCount);
+	public PageBean findCountPage(String cid,int currentCount,int currentPage) {
+		PageBean<Product> pageBean = new PageBean<Product>();
+		int totalCount = dao.getCount(cid);
+		int totalPage = (int) Math.ceil(1.0*totalCount/currentCount);
+		//select * from product where cid=? limit ?,?;
+		int index = (currentPage-1)*currentCount;
+		List<Product> list = dao.finProductByPage(cid,index,currentCount);
 		pageBean.setCurrentPage(currentPage);
 		pageBean.setCurrentCount(currentCount);
 		pageBean.setTotalCount(totalCount);
 		pageBean.setTotalPage(totalPage);
+		pageBean.setList(list);
+		return pageBean;
+	}
+
+	public Product findProductById(String pid) {
+		ProductDao dao = new ProductDao();
+		Product product = dao.findProductById(pid);
+		return product;
 	}
 }
 

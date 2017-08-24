@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
@@ -47,14 +48,37 @@ public class ProductDao {
 		}
 	}
 
-	public int getCount() {
+	public int getCount(String cid) {
 		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
-		String sql = "SELECT COUNT(*) FROM product";
+		String sql = "SELECT COUNT(*) FROM product WHERE cid=?";
 		try {
-			return (Integer) runner.query(sql, new ScalarHandler());
+			long l = (Long) runner.query(sql, new ScalarHandler(),cid);
+			return (int)l;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
+		}
+	}
+
+	public List<Product> finProductByPage(String cid, int index, int currentCount) {
+		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+		String sql = "SELECT * FROM product WHERE cid=? LIMIT ?,?;";
+		try {
+			return (List<Product>) runner.query(sql, new BeanListHandler<Product>(Product.class),cid,index,currentCount);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Product findProductById(String pid) {
+		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
+		String sql = "SELECT * FROM product WHERE pid=?;";
+		try {
+			return (Product) runner.query(sql, new BeanHandler<Product>(Product.class),pid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
