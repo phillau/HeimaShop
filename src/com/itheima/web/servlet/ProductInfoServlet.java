@@ -44,10 +44,10 @@ public class ProductInfoServlet extends HttpServlet {
 						 sb.append("-");
 					}
 					 pids = sb.substring(0, sb.length()-1);
-				}
+				} 
 			}
 		}
-			 System.out.println("pids="+pids);
+			 System.out.println("pids="+pids); 
 			 Cookie cookie = new Cookie("pids",pids);
 			 response.addCookie(cookie);
 		

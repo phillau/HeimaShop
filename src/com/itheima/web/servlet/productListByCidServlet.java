@@ -25,7 +25,12 @@ public class productListByCidServlet extends HttpServlet {
 		Cookie[] cookies = request.getCookies();
 		if(cookies!=null){
 		for(Cookie cookie:cookies){
-			
+			if("pids".equals(cookie.getName())){
+				String[] split = cookie.getValue().split("-");
+				for(String s:split){
+					System.err.println("s="+s);
+				}
+			}
 		}
 		}
 		request.setAttribute("pageBean", pageBean);
